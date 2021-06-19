@@ -1,0 +1,20 @@
+{
+  "name": "create-express-app",
+  "version": "1.0.0",
+  "keywords": [
+    "express"
+  ],
+  "description": "Create Express apps.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avinoamn/create-express-app"
+  },
+  "bin": {
+    "create-express-app": "./create-express-app/index.js"
+  },
+  "author": "avinoamn",
+  "license": "MIT",
+  "dependencies": {
+    "shelljs": "^0.8.4"
+  }
+}
