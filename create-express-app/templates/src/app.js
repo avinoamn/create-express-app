@@ -25,7 +25,7 @@ async function getApp() {
     }
 
     // MIDDLEWARE
-    app.use(cors());
+    app.use(cors({origin: config.origins}));
     app.use(helmet());
     app.use(compression());
     app.use(bodyParser.json());
@@ -35,7 +35,7 @@ async function getApp() {
     app.use(config.api.prefix, routes());
 
     // ERROR HANDLERS
-    app.use(config.api.prefix, errorHandlers());
+    app.use(errorHandlers());
 
     // EXPORTS
     return app;
