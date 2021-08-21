@@ -11,12 +11,7 @@ function getApp() {
     const app = express();
 
     // HEALTH CHECK ENDPOINTS
-    app.get('/status', (req, res) => {
-        res.status(200).end();
-    });
-    app.head('/status', (req, res) => {
-        res.status(200).end();
-    });
+    app.use(statusEndpoints());
 
     if (process.env.NODE_ENV !== 'development') {
         // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)

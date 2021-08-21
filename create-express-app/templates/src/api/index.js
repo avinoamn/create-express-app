@@ -1,6 +1,14 @@
 const { Router } = require('express');
 const hello = require('./routes/hello');
+const status = require('./routes/status');
 const express = require('./errorHandlers/express');
+
+const statusEndpoints = () => {
+    const app = Router();
+    status(app);
+
+	return app;
+};
 
 const routes = () => {
 	const app = Router();
@@ -17,6 +25,7 @@ const errorHandlers = () => {
 };
 
 module.exports = {
+    statusEndpoints,
     routes,
     errorHandlers
 };
