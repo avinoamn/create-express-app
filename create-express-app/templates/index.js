@@ -4,8 +4,8 @@ const Logger = require('./src/loaders/logger');
 
 const getApp = require('./src/app');
 
-async function startServer() {
-    const app = await getApp();
+function startServer() {
+    const app = getApp();
 
     app.listen(config.port, () => {
         Logger.info(`

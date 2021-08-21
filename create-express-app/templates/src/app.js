@@ -6,7 +6,7 @@ const bodyParser = require( 'body-parser');
 const {errorHandlers, routes} = require( './api');
 const config = require( './config');
 
-async function getApp() {
+function getApp() {
     // INIT
     const app = express();
 
