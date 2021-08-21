@@ -29,6 +29,8 @@ function installDependencies() {
 }
 
 function copyTemplates() {
+    copy('./templates/.gitignore', './');
+    copy('./templates/index.js', './');
     copy('./templates/src', './');
 }
 
