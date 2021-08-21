@@ -3,7 +3,7 @@ const helmet = require( 'helmet');
 const cors = require( 'cors');
 const compression = require( 'compression');
 const bodyParser = require( 'body-parser');
-const {errorHandlers, routes} = require( './api');
+const {errorHandlers, routes, statusEndpoints} = require( './api');
 const config = require( './config');
 
 function getApp() {
