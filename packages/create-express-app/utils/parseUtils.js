@@ -9,6 +9,10 @@ const typesMap = {
 
 };
 
+function DBNameParser(dbName) {
+
+}
+
 function parseJSON(jsonStr) {
     try {
         return JSON.parse(jsonStr);        
@@ -38,5 +42,6 @@ function JSONModelsParser(jsonStr) {
 }
 
 module.exports = {
-    JSONModelsParser
+    JSONModelsParser,
+    DBNameParser
 };

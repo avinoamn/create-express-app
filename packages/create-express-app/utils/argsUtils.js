@@ -1,4 +1,4 @@
-const {JSONModelsParser} = require('./JSONUtils');
+const {JSONModelsParser, DBNameParser} = require('./parseUtils');
 
 const dependencies = {
     default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston', 'fs', 'path']
@@ -10,18 +10,17 @@ const argsMap = {
             default: ['cookie-parser', 'express-session'],
             mongo: ['connect-mongo']
         },
-        db: ''
+        defaultValue: 'mongo',
+        valueParser: DBNameParser
     },
     passport: {
-        dependencies: {
-            default: ['passport']
-        },
+        dependencies: ['passport'],
+        defaultValue: 'mongo', // DB name
+        valueParser: DBNameParser
     },
     mongo: {
-        dependencies: {
-            default: ['mongoose']
-        },
-        defaultValue: {},
+        dependencies: ['mongoose'],
+        defaultValue: {}, // Models Object
         valueParser: JSONModelsParser
     }
 };
@@ -47,7 +46,10 @@ function argsParser(args) {
 
         return isArg ? {
             ...acc,
-            [arg]: getArgValue(arg, nextArg)
+            [arg]: {
+                dependencies: getArgDependencies(arg, nextArg),
+                value: getArgValue(arg, nextArg)
+            }
         } : acc;
     }, {});
 }

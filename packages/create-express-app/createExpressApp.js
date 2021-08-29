@@ -7,7 +7,7 @@ const args = argsParser(process.argv.slice(3));
 function init() {
     initProjectDirectory(projectName);
     initPackageJson();
-    installDependencies();
+    installDependencies(args);
     copyTemplates();
 }
 
