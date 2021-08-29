@@ -1,11 +1,15 @@
-const {argsMap, dependencies} = require('../consts');
+const {valuesMap, dependenciesMap} = require('../consts');
+
+function getArgDependencies(arg, nextArg) {
+    [...dependenciesMap[arg].default, ...(dependenciesMap[arg][nextArg] || [])]
+}
 
 function getArgValue(arg, nextArg) {
     const isValue = !nextArg.startsWith('--');
     
     return isValue ?
-        argsMap[arg].valueParser(value) :
-        argsMap[arg].defaultValue;
+        valuesMap[arg].valueParser(value) :
+        valuesMap[arg].defaultValue;
 }
 
 function argsParser(args) {
@@ -15,7 +19,7 @@ function argsParser(args) {
         const nextArg = acc[index + 1];
 
         // Check if current is a valid argument
-        if (isArg && !argsMap[arg]) {
+        if (isArg && !valuesMap[arg]) {
             throw new Error(`Invalid arg: ${arg}`);
         }
 
@@ -30,7 +34,9 @@ function argsParser(args) {
 }
 
 function getDependencies(args) {
-    return dependencies.default;
+    return Object.keys(args).reduce((deps, currArg) => (
+        [...deps, args[currArg].dependencies]
+    ), dependenciesMap.default);
 }
 
 module.exports = {

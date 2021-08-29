@@ -1,26 +1,30 @@
-const {JSONModelsParser, DBNameParser} = require('./parseUtils');
+const {JSONModelsParser, DBNameParser} = require('../utils/parseUtils');
 
-const dependencies = {
-    default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston', 'fs', 'path']
+const dependenciesMap = {
+    default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston', 'fs', 'path'],
+    session: {
+        default: ['cookie-parser', 'express-session'],
+        mongo: ['connect-mongo']
+    },
+    passport: {
+        default: ['passport']
+    },
+    mongo: {
+        default: ['mongoose']
+    }
 };
 
-const argsMap = {
+const valuesMap = {
     session: {
-        dependencies: {
-            default: ['cookie-parser', 'express-session'],
-            mongo: ['connect-mongo']
-        },
-        defaultValue: 'mongo',
+        defaultValue: 'express', // session store
         valueParser: DBNameParser
     },
     passport: {
-        dependencies: ['passport'],
-        defaultValue: 'mongo',
+        defaultValue: 'mongo', // users db
         valueParser: DBNameParser
     },
     mongo: {
-        dependencies: ['mongoose'],
-        defaultValue: {},
+        defaultValue: {}, // mongo models
         valueParser: JSONModelsParser
     }
 };
@@ -33,11 +37,10 @@ const typesMap = {
     'array': Array,
     'buffer': Buffer,
     'any': Object
-
 };
 
 module.exports = {
-    dependencies,
-    argsMap,
+    dependenciesMap,
+    valuesMap,
     typesMap
 };
