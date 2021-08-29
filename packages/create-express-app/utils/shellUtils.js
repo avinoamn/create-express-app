@@ -16,8 +16,8 @@ function initPackageJson() {
     shell.exec('npm init --y');
 }
 
-function installDependencies() {
-    const dependencies = getDependencies();
+function installDependencies(args) {
+    const dependencies = getDependencies(args);
     shell.exec(`npm install ${dependencies.join(' ')}`);
 }
 

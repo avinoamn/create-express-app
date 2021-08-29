@@ -1,37 +1,58 @@
+const {JSONModelsParser} = require('./JSONUtils');
+
 const dependencies = {
-    default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston']
+    default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston', 'fs', 'path']
 };
 
 const argsMap = {
     session: {
-        dependencies: [],
+        dependencies: {
+            default: ['cookie-parser', 'express-session'],
+            mongo: ['connect-mongo']
+        },
         db: ''
     },
     passport: {
-        dependencies: [],
-        db: '',
+        dependencies: {
+            default: ['passport']
+        },
     },
     mongo: {
-        dependencies: [],
-        models: {}
+        dependencies: {
+            default: ['mongoose']
+        },
+        defaultValue: {},
+        valueParser: JSONModelsParser
     }
 };
 
+function getArgValue(arg, nextArg) {
+    const isValue = !nextArg.startsWith('--');
+    
+    return isValue ?
+        argsMap[arg].valueParser(value) :
+        argsMap[arg].defaultValue;
+}
+
 function argsParser(args) {
     args.reduce((acc, curr, index) => {
+        const isArg = curr.startsWith('--');
+        const arg = curr.substr(2);
+        const nextArg = acc[index + 1];
+
         // Check if current is a valid argument
-        if (curr.startsWith('--') && !argsMap[curr]) {
-            throw new Error(`Invalid arg: ${curr}`);
+        if (isArg && !argsMap[arg]) {
+            throw new Error(`Invalid arg: ${arg}`);
         }
 
-        return curr.startsWith('--') ? {
+        return isArg ? {
             ...acc,
-            [curr.substr(2)]: argsMap[curr.substr(2)].getArgValue(acc[index + 1])
+            [arg]: getArgValue(arg, nextArg)
         } : acc;
     }, {});
 }
 
-function getDependencies() {
+function getDependencies(args) {
     return dependencies.default;
 }
 
