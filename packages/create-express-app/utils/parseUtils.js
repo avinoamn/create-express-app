@@ -1,13 +1,4 @@
-const typesMap = {
-    'number': Number,
-    'string': String,
-    'boolean': Boolean,
-    'date': Date,
-    'array': Array,
-    'buffer': Buffer,
-    'any': Object
-
-};
+const {typesMap} = require('../consts');
 
 function DBNameParser(dbName) {
 

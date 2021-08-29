@@ -1,29 +1,4 @@
-const {JSONModelsParser, DBNameParser} = require('./parseUtils');
-
-const dependencies = {
-    default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston', 'fs', 'path']
-};
-
-const argsMap = {
-    session: {
-        dependencies: {
-            default: ['cookie-parser', 'express-session'],
-            mongo: ['connect-mongo']
-        },
-        defaultValue: 'mongo',
-        valueParser: DBNameParser
-    },
-    passport: {
-        dependencies: ['passport'],
-        defaultValue: 'mongo', // DB name
-        valueParser: DBNameParser
-    },
-    mongo: {
-        dependencies: ['mongoose'],
-        defaultValue: {}, // Models Object
-        valueParser: JSONModelsParser
-    }
-};
+const {argsMap, dependencies} = require('../consts');
 
 function getArgValue(arg, nextArg) {
     const isValue = !nextArg.startsWith('--');
