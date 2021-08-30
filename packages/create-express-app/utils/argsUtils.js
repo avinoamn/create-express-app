@@ -1,19 +1,19 @@
 const {valuesMap, dependenciesMap} = require('../consts');
 
 function getArgDependencies(arg, nextArg) {
-    [...dependenciesMap[arg].default, ...(dependenciesMap[arg][nextArg] || [])]
+    return [...dependenciesMap[arg].default, ...(dependenciesMap[arg][nextArg] || [])];
 }
 
 function getArgValue(arg, nextArg) {
-    const isValue = !nextArg.startsWith('--');
+    const isValue = nextArg && !nextArg.startsWith('--');
     
     return isValue ?
-        valuesMap[arg].valueParser(value) :
+        valuesMap[arg].valueParser(nextArg) :
         valuesMap[arg].defaultValue;
 }
 
 function argsParser(args) {
-    args.reduce((acc, curr, index) => {
+    return args.reduce((acc, curr, index) => {
         const isArg = curr.startsWith('--');
         const arg = curr.substr(2);
         const nextArg = acc[index + 1];
@@ -35,7 +35,7 @@ function argsParser(args) {
 
 function getDependencies(args) {
     return Object.keys(args).reduce((deps, currArg) => (
-        [...deps, args[currArg].dependencies]
+        [...deps, ...args[currArg].dependencies]
     ), dependenciesMap.default);
 }
 

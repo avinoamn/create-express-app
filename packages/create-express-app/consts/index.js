@@ -1,5 +1,9 @@
 const {JSONModelsParser, DBNameParser} = require('../utils/parseUtils');
 
+const supportedDBs = ['mongo'];
+const sessionStoreDBs = ['mongo'];
+
+// Args to Deps Map
 const dependenciesMap = {
     default: ['express', 'helmet', 'cors', 'compression', 'body-parser', 'winston', 'fs', 'path'],
     session: {
@@ -14,14 +18,15 @@ const dependenciesMap = {
     }
 };
 
+// Args to Values Map
 const valuesMap = {
     session: {
         defaultValue: 'express', // session store
-        valueParser: DBNameParser
+        valueParser: DBNameParser(sessionStoreDBs)
     },
     passport: {
         defaultValue: 'mongo', // users db
-        valueParser: DBNameParser
+        valueParser: DBNameParser(supportedDBs)
     },
     mongo: {
         defaultValue: {}, // mongo models
@@ -29,6 +34,7 @@ const valuesMap = {
     }
 };
 
+// String of types to Objects of types Map
 const typesMap = {
     'number': Number,
     'string': String,
