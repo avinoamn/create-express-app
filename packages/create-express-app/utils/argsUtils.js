@@ -1,4 +1,4 @@
-const {valuesMap, dependenciesMap} = require('../consts');
+const {valuesMap, dependenciesMap, handlersMap} = require('../consts');
 
 function getArgDependencies(arg, nextArg) {
     return [...dependenciesMap[arg].default, ...(dependenciesMap[arg][nextArg] || [])];
@@ -39,7 +39,32 @@ function getDependencies(args) {
     ), dependenciesMap.default);
 }
 
+function handleArgs(args) {
+    Object.keys(args).forEach(arg => {
+        // app: {imports, loader, middleware}
+        // api: {index: {import, route}, queryValidator: {imports, function, export}, queryBuilder: {imports, function, export}}
+        const {config, app, consts, api} = handlersMap[arg](args[arg]);
+    }, [[], [], [], []]);
+}
+
+function handleSessionArg() {
+
+}
+
+function handlePassportArg() {
+
+}
+
+const handleDBArg = (db) => function (models) {
+    getConfig(db);
+    createLoader(db);
+    createModels(db, models);
+    createRoutesMiddleware(db, models);
+    createRoutes(models);
+}
+
 module.exports = {
     getDependencies,
-    argsParser
+    argsParser,
+    handleArgs
 };

@@ -22,15 +22,15 @@ function installDependencies(args) {
     shell.exec(`npm install ${dependencies.join(' ')}`);
 }
 
-function copyTemplates() {
-    copy('../resources/templates/.gitignore', './');
-    copy('../resources/templates/index.js', './');
-    copy('../resources/templates/src', './');
+function copyMustTemplates() {
+    copy('../resources/templates/must/.gitignore', './');
+    copy('../resources/templates/must/index.js', './');
+    copy('../resources/templates/must/src', './');
 }
 
 module.exports = {
     initProjectDirectory,
     initPackageJson,
     installDependencies,
-    copyTemplates
+    copyMustTemplates
 };

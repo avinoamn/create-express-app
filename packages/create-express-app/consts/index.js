@@ -1,4 +1,5 @@
 const {JSONModelsParser, DBNameParser} = require('../utils/parseUtils');
+const {handleSessionArg, handlePassportArg, handleDBArg} = require('../utils/argsUtils');
 
 const supportedDBs = ['mongo'];
 const sessionStoreDBs = ['mongo'];
@@ -34,6 +35,13 @@ const valuesMap = {
     }
 };
 
+// Args to Handlers Map
+const handlersMap = {
+    session: handleSessionArg,
+    passport: handlePassportArg,
+    mongo: handleDBArg('mongo')
+};
+
 // String of types to Objects of types Map
 const typesMap = {
     'number': Number,
@@ -48,5 +56,6 @@ const typesMap = {
 module.exports = {
     dependenciesMap,
     valuesMap,
+    handlersMap,
     typesMap
 };
