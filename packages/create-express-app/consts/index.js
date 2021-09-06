@@ -39,7 +39,7 @@ const valuesMap = {
 const handlersMap = {
     session: handleSessionArg,
     passport: handlePassportArg,
-    mongo: handleDBArg('mongo')
+    mongo: handleDBArg
 };
 
 // String of types to Objects of types Map
@@ -51,6 +51,20 @@ const typesMap = {
     'array': Array,
     'buffer': Buffer,
     'any': Object
+};
+
+
+// Args to Configs Map
+const configsMap = {
+    session: [
+
+    ].join(),
+    passport: [
+
+    ].join(),
+    mongo: [
+
+    ].join()
 };
 
 module.exports = {

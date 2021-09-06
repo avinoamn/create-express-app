@@ -42,29 +42,49 @@ function getDependencies(args) {
 function handleArgs(args) {
     Object.keys(args).forEach(arg => {
         // app: {imports, loader, middleware}
-        // api: {index: {import, route}, queryValidator: {imports, function, export}, queryBuilder: {imports, function, export}}
-        const {config, app, consts, api} = handlersMap[arg](args[arg]);
+        // api: {index: {import, route}}
+        // consts: {queryParams}
+        const {config, app, consts, api} = handlersMap[arg](args, arg);
     }, [[], [], [], []]);
 }
 
-function handleSessionArg() {
+function handleSessionArg(args, sessionArg) {
+    const db = args[sessionArg].value;
 
+    
 }
 
-function handlePassportArg() {
+function handlePassportArg(args, passportArg) {
+    const db = args[passportArg].value;
+    const userModel = args[db].value.user;
 
+    if (userModel) {
+        
+    } else {
+        throw new Error('No User model was found');
+    }
 }
 
-const handleDBArg = (db) => function (models) {
+function handleDBArg(args, db) {
+    const models = args[db].value;
+    const includePassport = !!args.passport;
+
     getConfig(db);
+    getConsts(db, models);
+    getApi(Object.keys(models));
+    getApp(db);
+
     createLoader(db);
     createModels(db, models);
-    createRoutesMiddleware(db, models);
-    createRoutes(models);
+    createController(db);
+    createRoutes(models, includePassport);
 }
 
 module.exports = {
     getDependencies,
     argsParser,
-    handleArgs
+    handleArgs,
+    handleSessionArg,
+    handlePassportArg,
+    handleDBArg
 };

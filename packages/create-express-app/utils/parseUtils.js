@@ -31,7 +31,7 @@ function JSONModelsParser(jsonStr) {
             }
         }, {});
 
-        return { ...resModels, [currModel]: validatedFields };
+        return { ...resModels, [currModel.toLowerCase()]: validatedFields };
     }, {});
 
     return validatedModels;
