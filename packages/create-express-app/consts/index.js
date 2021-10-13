@@ -1,8 +1,7 @@
-const {JSONModelsParser, DBNameParser} = require('../utils/parseUtils');
-const {handleSessionArg, handlePassportArg, handleDBArg} = require('../utils/argsUtils');
-
-const supportedDBs = ['mongo'];
+const authDBs = ['mongo'];
 const sessionStoreDBs = ['mongo'];
+
+const routesPrivileges = ['all', 'user', 'admin'];
 
 // Args to Deps Map
 const dependenciesMap = {
@@ -19,57 +18,29 @@ const dependenciesMap = {
     }
 };
 
-// Args to Values Map
-const valuesMap = {
-    session: {
-        defaultValue: 'express', // session store
-        valueParser: DBNameParser(sessionStoreDBs)
-    },
-    passport: {
-        defaultValue: 'mongo', // users db
-        valueParser: DBNameParser(supportedDBs)
-    },
-    mongo: {
-        defaultValue: {}, // mongo models
-        valueParser: JSONModelsParser
-    }
-};
-
-// Args to Handlers Map
-const handlersMap = {
-    session: handleSessionArg,
-    passport: handlePassportArg,
-    mongo: handleDBArg
-};
+// Args to default values Map
+const defaultValuesMap = {
+    session: 'express',
+    passport: 'mongo',
+    mongo: {}
+}
 
 // String of types to Objects of types Map
 const typesMap = {
-    'number': Number,
-    'string': String,
-    'boolean': Boolean,
-    'date': Date,
-    'array': Array,
-    'buffer': Buffer,
-    'any': Object
-};
-
-
-// Args to Configs Map
-const configsMap = {
-    session: [
-
-    ].join(),
-    passport: [
-
-    ].join(),
-    mongo: [
-
-    ].join()
+    'number': 'Number',
+    'string': 'String',
+    'boolean': 'Boolean',
+    'date': 'Date',
+    'array': 'Array',
+    'buffer': 'Buffer',
+    'any': 'Object'
 };
 
 module.exports = {
+    authDBs,
+    sessionStoreDBs,
+    routesPrivileges,
     dependenciesMap,
-    valuesMap,
-    handlersMap,
-    typesMap
+    defaultValuesMap,
+    typesMap,
 };
