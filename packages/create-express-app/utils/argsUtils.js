@@ -1,90 +1,70 @@
-const {valuesMap, dependenciesMap, handlersMap} = require('../consts');
+const {dependenciesMap} = require('../consts');
 
-function getArgDependencies(arg, nextArg) {
-    return [...dependenciesMap[arg].default, ...(dependenciesMap[arg][nextArg] || [])];
-}
-
-function getArgValue(arg, nextArg) {
-    const isValue = nextArg && !nextArg.startsWith('--');
-    
-    return isValue ?
-        valuesMap[arg].valueParser(nextArg) :
-        valuesMap[arg].defaultValue;
-}
-
-function argsParser(args) {
-    return args.reduce((acc, curr, index) => {
-        const isArg = curr.startsWith('--');
-        const arg = curr.substr(2);
-        const nextArg = acc[index + 1];
-
-        // Check if current is a valid argument
-        if (isArg && !valuesMap[arg]) {
-            throw new Error(`Invalid arg: ${arg}`);
-        }
-
-        return isArg ? {
-            ...acc,
-            [arg]: {
-                dependencies: getArgDependencies(arg, nextArg),
-                value: getArgValue(arg, nextArg)
-            }
-        } : acc;
-    }, {});
+function getArgDependencies(arg, value) {
+    return [...dependenciesMap[arg].default, ...(dependenciesMap[arg][value] || [])];
 }
 
 function getDependencies(args) {
     return Object.keys(args).reduce((deps, currArg) => (
-        [...deps, ...args[currArg].dependencies]
+        [...deps, ...getArgDependencies(currArg, args[currArg])]
     ), dependenciesMap.default);
-}
-
-function handleArgs(args) {
-    Object.keys(args).forEach(arg => {
-        // app: {imports, loader, middleware}
-        // api: {index: {import, route}}
-        // consts: {queryParams}
-        const {config, app, consts, api} = handlersMap[arg](args, arg);
-    }, [[], [], [], []]);
 }
 
 function handleSessionArg(args, sessionArg) {
     const db = args[sessionArg].value;
 
-    
+    getConfig(sessionArg, db);
+    getApp(sessionArg, db);
 }
 
 function handlePassportArg(args, passportArg) {
     const db = args[passportArg].value;
-    const userModel = args[db].value.user;
 
-    if (userModel) {
-        
-    } else {
-        throw new Error('No User model was found');
+    getConfig(passportArg);
+    getApp(passportArg);
+
+    createLoader(passportArg, db);
+}
+
+function handleDBArg(args, dbArg) {
+    const models = args[dbArg].value;
+    const includePassport = !!args.passport;
+
+    getConfig(dbArg);
+    getConsts(dbArg, models);
+    getApi(Object.keys(models));
+    getApp(dbArg);
+
+    createLoader(dbArg);
+    createModels(dbArg, models);
+    createController(dbArg);
+    createRoutes(models, includePassport);
+}
+
+function getArgHandler(arg) {
+    switch (arg) {
+        case 'session': return handleSessionArg;
+        case 'passport': return handlePassportArg;
+        case 'mongo': return handleDBArg;
     }
 }
 
-function handleDBArg(args, db) {
-    const models = args[db].value;
-    const includePassport = !!args.passport;
-
-    getConfig(db);
-    getConsts(db, models);
-    getApi(Object.keys(models));
-    getApp(db);
-
-    createLoader(db);
-    createModels(db, models);
-    createController(db);
-    createRoutes(models, includePassport);
+function handleArgs(args) {
+    Object.keys(args).forEach(arg => {
+        // app: {imports, init, middleware}
+        // api: {index: {import, route}}
+        // consts: {queryParams}
+        const argHandler = getArgHandler(arg);
+        const {config, app, consts, api} = argHandler(args, arg);
+        
+        updateConfig(config);
+        updateApp(app);
+        updateConsts(consts);
+        updateApi(api);
+    });
 }
 
 module.exports = {
     getDependencies,
-    argsParser,
-    handleArgs,
-    handleSessionArg,
-    handlePassportArg,
-    handleDBArg
+    handleArgs
 };
