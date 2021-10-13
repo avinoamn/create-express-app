@@ -24,7 +24,7 @@ function installDependencies(args) {
 
 function copyTemplates(srcDir, destDir, files) {
     files.forEach(file => {
-        copy(`${srcDir}/${file}`, destDir);        
+        copy(`../resources/templates/${srcDir}/${file}`, destDir);        
     });
 }
 
