@@ -104,12 +104,12 @@ function parsePrivileges(privileges) {
         return privileges;
     } else if (isObject(privileges)) {
         const get = privileges.get;
-        const createAndUpdate = privileges.createAndUpdate;
+        const createUpdateDelete = privileges.createUpdateDelete;
 
-        if ([get, createAndUpdate].every(privilege => privilege === undefined || routesPrivileges.includes(privilege))) {
+        if ([get, createUpdateDelete].every(privilege => privilege === undefined || routesPrivileges.includes(privilege))) {
             return privileges;
         } else {
-            throw new Error(`Invalid Privileges '${get}' / '${createAndUpdate}'!`);
+            throw new Error(`Invalid Privileges '${get}' / '${createUpdateDelete}'!`);
         }
     } else {
         throw new Error('Privileges should be an object!');
