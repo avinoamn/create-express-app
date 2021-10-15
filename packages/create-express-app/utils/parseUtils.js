@@ -11,7 +11,7 @@ function parseJSON(jsonStr) {
 function parseModelName(modelName) {
     if (isString(modelName)) {
         if (modelName) {
-            return modelName[0].toUpperCase().concat(modelName.slice(1).toLowerCase());
+            return modelName[0].toUpperCase().concat(modelName.slice(1));
         } else {
             throw new Error('Model Names cannot be empty!');
         }
