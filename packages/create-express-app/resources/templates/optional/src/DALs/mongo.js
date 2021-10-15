@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 function get(modelName, query) {
     const Model = mongoose.model(modelName);
 
-    Model.find(query, (err, docs) => {
+    return Model.find(query, (err, docs) => {
         if (err) {
             throw err;
         }
