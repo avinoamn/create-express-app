@@ -22,8 +22,8 @@ const isValidOnSchema = (obj, schema) => {
         const isRequired = schema.isRequired;
 
         return isRequired ? 
-            (value !== undefined) && isValid(type, value, fields) :
-            (value === undefined) || isValid(type, value, fields);
+            (value !== undefined) && isValid(type, value, fields || {}) :
+            (value === undefined) || isValid(type, value, fields || {});
     });
 };
 
