@@ -14,20 +14,20 @@ const isBuffer = value => !isObject(value) || Buffer.isBuffer(value);
 
 const isEmptyObject = value => Boolean(Object.keys(value).length);
 
-const isValidOnSchema = (obj, schema) => {
+const isValidOnSchema = (obj, schema, mustHaveRequired=false) => {
     return Object.keys(schema).every(field => {
         const value = obj[field];
         const type = schema.type;
         const fields = schema.fields;
         const isRequired = schema.isRequired;
 
-        return isRequired ? 
-            (value !== undefined) && isValid(type, value, fields || {}) :
-            (value === undefined) || isValid(type, value, fields || {});
+        return (mustHaveRequired && isRequired) ? 
+            (value !== undefined) && isValid(type, value, fields || {}, mustHaveRequired) :
+            (value === undefined) || isValid(type, value, fields || {}, mustHaveRequired);
     });
 };
 
-function isValid(type, value, schema={}) {
+function isValid(type, value, schema={}, mustHaveRequired=false) {
     switch (type) {
         case 'Number': return isNumber(value);
         case 'String': return isString(value);
@@ -35,6 +35,19 @@ function isValid(type, value, schema={}) {
         case 'Date': return isDate(value);
         case 'Array': return isArray(value);
         case 'Buffer': return isBuffer(value);
-        case 'Object': return isObject(value) && isValidOnSchema(value, schema);
+        case 'Object': return isObject(value) && isValidOnSchema(value, schema, mustHaveRequired);
     }
 }
+
+module.exports = {
+    isNumber,
+    isArray,
+    isBoolean,
+    isBuffer,
+    isDate,
+    isString,
+    isObject,
+    isEmptyObject,
+    isValidOnSchema,
+    isValid
+};
