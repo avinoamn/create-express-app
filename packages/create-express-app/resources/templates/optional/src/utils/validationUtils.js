@@ -18,12 +18,12 @@ const isValidOnSchema = (obj, schema, mustHaveRequired=false) => {
     return Object.keys(schema).every(field => {
         const value = obj[field];
         const type = schema.type;
-        const fields = schema.fields;
+        const fields = schema.fields || {};
         const isRequired = schema.isRequired;
 
         return (mustHaveRequired && isRequired) ? 
-            (value !== undefined) && isValid(type, value, fields || {}, mustHaveRequired) :
-            (value === undefined) || isValid(type, value, fields || {}, mustHaveRequired);
+            (value !== undefined) && isValid(type, value, fields, mustHaveRequired) :
+            (value === undefined) || isValid(type, value, fields, mustHaveRequired);
     });
 };
 
