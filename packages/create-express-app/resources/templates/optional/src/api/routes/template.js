@@ -5,6 +5,10 @@ const {buildQuery} = require('../middlewares/queryBuilder');
 const {schema} = require('../../consts/ROUTE_NAMEs');
 const ROUTE_NAMEs = require('../../controllers/ROUTE_NAMEs');
 
+const queryParamsValidator = validateQueryParams(schema);
+const dataParamsValidator = validateDataParams(schema);
+const queryBuilder = buildQuery(schema, 'DB_NAME');
+
 const route = Router();
 
 module.exports = (app) => {
@@ -13,32 +17,32 @@ module.exports = (app) => {
     // get ROUTE_NAMEs
     route.get(
         '/get', //<GET_AUTH_MIDDLEWARE>//
-        validateQueryParams(schema),
-        buildQuery(schema),
+        queryParamsValidator,
+        queryBuilder,
         ROUTE_NAMEs.get
     );
 
     // create ROUTE_NAME
     route.post(
         '/create', //<CREATE_UPDATE_DELETE_AUTH_MIDDLEWARE>//
-        validateDataParams(schema),
+        dataParamsValidator,
         ROUTE_NAMEs.create
     );
 
     // update ROUTE_NAME
     route.patch(
         '/update', //<CREATE_UPDATE_DELETE_AUTH_MIDDLEWARE>//
-        validateQueryParams(schema),
-        validateDataParams(schema),
-        buildQuery(schema),
+        queryParamsValidator,
+        dataParamsValidator,
+        queryBuilder,
         ROUTE_NAMEs.update
     );
 
     // delete ROUTE_NAME
     route.delete(
         '/delete', //<CREATE_UPDATE_DELETE_AUTH_MIDDLEWARE>//
-        validateQueryParams(schema),
-        buildQuery(schema),
+        queryParamsValidator,
+        queryBuilder,
         ROUTE_NAMEs.deleteMany
     );
 };
