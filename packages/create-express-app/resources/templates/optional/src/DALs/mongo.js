@@ -1,47 +1,27 @@
 const mongoose = require('mongoose');
 
-function get(modelName, query) {
+async function get(modelName, query) {
     const Model = mongoose.model(modelName);
 
-    return Model.find(query, (err, docs) => {
-        if (err) {
-            throw err;
-        }
-        return docs;
-    });
+    return await Model.find(query);
 }
 
-function create(modelName, data) {
+async function create(modelName, data) {
     const Model = mongoose.model(modelName);
     
-    return Model.create(data, (err, doc) => {
-        if (err) {
-            throw err;
-        }
-        return doc;
-    });
+    return await Model.create(data);
 }
 
-function update(modelName, query, data) {
+async function update(modelName, query, data) {
     const Model = mongoose.model(modelName);
     
-    return Model.update(query, data, (err, doc) => {
-        if (err) {
-            throw err;
-        }
-        return doc;
-    });
+    return await Model.update(query, data);
 }
 
-function deleteMany(modelName, query) {
+async function deleteMany(modelName, query) {
     const Model = mongoose.model(modelName);
     
-    return Model.deleteMany(query, (err, doc) => {
-        if (err) {
-            throw err;
-        }
-        return doc;
-    });
+    return await Model.deleteMany(query);
 }
 
 module.exports = {
