@@ -1,6 +1,6 @@
 const {Router} = require('express');
 //<AUTH_MIDDLEWARE_IMPORT>//
-const {validateQueryParams, validateDataParams} = require('../middlewares/queryParamsValidator');
+const {validateQueryParams, validateDataParams} = require('../middlewares/paramsValidator');
 const {buildQuery} = require('../middlewares/queryBuilder');
 const {schema} = require('../../consts/ROUTE_NAMEs');
 const ROUTE_NAMEs = require('../../controllers/ROUTE_NAMEs');
