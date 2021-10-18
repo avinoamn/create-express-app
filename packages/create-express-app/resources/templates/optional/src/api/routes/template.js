@@ -7,7 +7,7 @@ const ROUTE_NAMEs = require('../../controllers/ROUTE_NAMEs');
 
 const queryParamsValidator = validateQueryParams(schema);
 const dataParamsValidator = validateDataParams(schema);
-const queryBuilder = buildQuery(schema, 'DB_NAME');
+const queryBuilder = buildQuery(schema, require('../../utils/queryBuildingUtils/DB_NAME'));
 
 const route = Router();
 
