@@ -1,27 +1,16 @@
-// Build Get query from url params 
-const buildGetQuery = (buildQueryParams) => (req, res, next) => {
-    buildQuery(req.query, buildQueryParams, req, next);
-};
+const buildQuery = (schema, buildQuery) => (req, res, next) => {
+    const params = {...req.query, ...req.body.query};
+    
+    const query = Object.keys(params).reduce((query, param) => {
+        const fieldQuery = buildQuery(param, params[param], schema[param]);
 
-// Build Create query from body
-const buildCreateQuery = (buildQueryParams) => (req, res, next) => {
-    buildQuery(req.body, buildQueryParams, req, next);
-};
-
-const buildQuery = (queryParams, buildQueryParams, req, next) => {
-    const dbQuery = Object.keys(queryParams).reduce((acc, param) => {
-        const queryOperator = buildQueryParams[param].queryOperator;
-        const queryValue = queryParams[param];
-        const fieldQuery = getFieldQuery(queryOperator, queryValue);
-
-        return { ...acc, [param]: fieldQuery };
+        return { ...query, ...fieldQuery };
     }, {});
 
-    req.dbQuery = dbQuery;
+    req.body.query = query;
     next();
 };
 
 module.exports = {
-    buildGetQuery,
-    buildCreateQuery
+    buildQuery
 };
